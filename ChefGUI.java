@@ -134,22 +134,22 @@ public class ChefGUI extends HBox
 			Order currentOrder = orders.get(i); // Get the current order
 			
 			// Make an HBox if the order status is Processed or Cooking
-			if (currentOrder.status.compareTo("Processing") == 0 ||
-			    currentOrder.status.compareTo("Cooking") == 0)
+			if (currentOrder.getStatus().compareTo("Processing") == 0 ||
+			    currentOrder.getStatus().compareTo("Cooking") == 0)
 			{
 				// Create a label to hold the ASURITE ID
-				Label asuriteLabel = new Label(currentOrder.asu);
+				Label asuriteLabel = new Label(currentOrder.getAsu());
 				asuriteLabel.setFont(new Font("Arial", 12));
 				
 				//  Create a button that lets the chef see the order details
 				Button startButton;
-				if (currentOrder.status.compareTo("Cooking") == 0)
+				if (currentOrder.getStatus().compareTo("Cooking") == 0)
 				{
-					startButton = new Button("Cooking " + currentOrder.orderNumber);
+					startButton = new Button("Cooking " + currentOrder.getOrderNumber());
 				}
 				else
 				{
-					startButton = new Button("Start " + currentOrder.orderNumber);
+					startButton = new Button("Start " + currentOrder.getOrderNumber());
 				}
 				startButton.setOnAction(new ButtonHandler());
 				
@@ -179,15 +179,15 @@ public class ChefGUI extends HBox
 	private VBox CreateDetail(Order order)
 	{
 		// Create a label to show the ASURITE ID
-		Label asurite = new Label("Customer: " + order.asu);
+		Label asurite = new Label("Customer: " + order.getAsu());
 		asurite.setFont(new Font("Arial", 12));
 		
 		// Create a label to show the Order Number
-		Label orderNumDisp = new Label("Order Number: " + order.orderNumber);
+		Label orderNumDisp = new Label("Order Number: " + order.getOrderNumber());
 		orderNumDisp.setFont(new Font("Arial", 12));
 		
 		// Create a label to show the Pizza Type
-		Label pizzaType = new Label("Pizza Type: " + order.pizza.pizzaType);
+		Label pizzaType = new Label("Pizza Type: " + order.getPizza().getPizzaType());
 		pizzaType.setFont(new Font("Arial", 12));
 		
 		// Create a label to show that the next section is about toppings
@@ -200,20 +200,20 @@ public class ChefGUI extends HBox
 		toppingsBox.getChildren().add(toppingLabel);
 		
 		// Scour the pizza object looking for all its toppings
-		for (int i = 0; i < order.pizza.toppings.length; i++)
+		for (int i = 0; i < order.getPizza().getToppings().length; i++)
 		{
 			// Create a label for the current topping
-			Label topping = new Label("     " + order.pizza.toppings[i]);
+			Label topping = new Label("     " + order.getPizza().getToppings()[i]);
 			topping.setFont(new Font("Arial", 12));
 			toppingsBox.getChildren().add(topping);
 		}
 		
 		// Create a label to show the pickup time
-		Label pickupTime = new Label(order.pickup.toString());
+		Label pickupTime = new Label(order.getPickup().toString());
 		pickupTime.setFont(new Font("Arial", 12));
 		
 		// Create a button that allows the chef to finish the order
-		Button finishButton = new Button("Finish " + order.orderNumber);
+		Button finishButton = new Button("Finish " + order.getOrderNumber());
 		finishButton.setOnAction(new ButtonHandler());
 		
 		// Finalize the VBox that'll hold all the above information
