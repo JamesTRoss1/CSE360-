@@ -82,7 +82,7 @@ public class Database {
         ArrayList<Order> list = getAllOrders();
         boolean found = false;
         for(int i = 0; i < list.size(); i++) {
-            if(list.get(i).orderNumber == orderNum) {
+            if(list.get(i).getOrderNumber() == orderNum) {
                 found = true;
             }
         }
@@ -93,7 +93,7 @@ public class Database {
         Order order = null;
         ArrayList<Order> list = getAllOrders();
         for(int i = 0; i < list.size(); i++) {
-            if(list.get(i).orderNumber == orderNum) {
+            if(list.get(i).getOrderNumber() == orderNum) {
                 order = list.get(i);
             }
         }
@@ -104,8 +104,8 @@ public class Database {
         ArrayList<Order> list = getAllOrders();
         createDatabase();
         for(int i = 0; i < list.size(); i++) {
-            if(list.get(i).orderNumber == orderNum) {
-                list.get(i).status = status;
+            if(list.get(i).getOrderNumber() == orderNum) {
+                list.get(i).setStatus(status);
             }
             addOrder(list.get(i));
         }
@@ -114,7 +114,7 @@ public class Database {
     public void printOrders() {
         ArrayList<Order> list = getAllOrders();
         for(int i = 0; i < list.size(); i++) {
-            System.out.println(list.get(i).orderNumber + " : " + list.get(i).status);
+            System.out.println(list.get(i).getOrderNumber() + " : " + list.get(i).getStatus());
         }
     }
 
@@ -123,7 +123,7 @@ public class Database {
         ArrayList<Order> list = getAllOrders();
         createDatabase();
         for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).orderNumber != orderNum) {
+            if (list.get(i).getOrderNumber() != orderNum) {
                 addOrder(list.get(i));
             }
             else {
@@ -135,9 +135,9 @@ public class Database {
 
     public int generateOrderNumber() {
         Random rd = new Random();
-        int orderNumber = rd.nextInt(1000);
+        int orderNumber = rd.nextInt(Integer.MAX_VALUE);
         while(foundOrderNumber(orderNumber)) {
-          orderNumber = rd.nextInt(1000);
+          orderNumber = rd.nextInt(Integer.MAX_VALUE);
         }
         return orderNumber;
     }
