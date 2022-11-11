@@ -139,7 +139,7 @@ public class OPA_FX_GUI extends HBox{
             Order currentOrder = orders.get(i);
 
             //each order will have value "unprocessed" before it is sent to the chef. Will change this to "processing"
-            if(currentOrder.getStatus().compareTo("Processed") != 0) {
+            if(currentOrder.getStatus().compareTo("Processed") == 0) {
                 // need a label for asurite, and possibly one for toppings/type
                 // also need a button that sends it to the chef's queue
                 Label asuriteLabel = new Label(currentOrder.getAsu());
