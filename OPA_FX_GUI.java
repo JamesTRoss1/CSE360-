@@ -27,8 +27,10 @@ public class OPA_FX_GUI extends HBox{
     private HBox[] chefBoxes;
     private VBox incomingQueue; // The orders that need to be approved
     private VBox chefQueue; // The orders that the Chef has received (from the processing agent)
-    Label detailsLabel;
-    Label chefDetailsLabel;
+    Label detailsLabelOne;
+    Label detailsLabelTwo;
+    Label chefDetailsLabelOne;
+    Label chefDetailsLabelTwo;
 
     public OPA_FX_GUI(Database givenDatabase) {
         database = givenDatabase; // Will need to be given in the program's Main.java
@@ -55,7 +57,7 @@ public class OPA_FX_GUI extends HBox{
         //Use a scroll pane to hold the incomingQueue
         ScrollPane incomingScroll = new ScrollPane();
         incomingScroll.setContent(incomingQueue);
-        incomingScroll.setPrefHeight(1080);
+        incomingScroll.setPrefHeight(1850);
         incomingScroll.setFitToHeight(true);
         incomingScroll.setFitToWidth(true);
 
@@ -69,15 +71,17 @@ public class OPA_FX_GUI extends HBox{
         incomingLabel.setStyle("-fx-font-weight: bold");
         incomingLabel.setAlignment(Pos.CENTER);
 
-        detailsLabel = new Label("");
-        detailsLabel.setFont(new Font("Arial", 10));
+        detailsLabelOne = new Label("");
+        detailsLabelOne.setFont(new Font("Arial", 15));
+        detailsLabelTwo = new Label("");
+        detailsLabelTwo.setFont(new Font("Arial", 15));
         incomingLabel.setStyle("-fx-font-weight: bold");
 
         // Put everything related to incomingQueue together
         VBox incomingBox = new VBox();
         incomingBox.setSpacing(10);
         incomingBox.setAlignment(Pos.TOP_CENTER);
-        incomingBox.getChildren().addAll(incomingLabel, incomingScroll, refreshButton, detailsLabel);
+        incomingBox.getChildren().addAll(incomingLabel, incomingScroll, refreshButton, detailsLabelOne, detailsLabelTwo);
         VBox.setVgrow(incomingBox, Priority.ALWAYS);
         //--------------------
         chefQueue = new VBox();
@@ -94,15 +98,17 @@ public class OPA_FX_GUI extends HBox{
         chefLabel.setFont(new Font("Arial", 18));
         chefLabel.setStyle("-fx-font-weight: bold");
 
-        chefDetailsLabel = new Label("");
-        chefDetailsLabel.setFont(new Font("Arial", 10));
+        chefDetailsLabelOne = new Label("");
+        chefDetailsLabelOne.setFont(new Font("Arial", 15));
+        chefDetailsLabelTwo = new Label("");
+        chefDetailsLabelTwo.setFont(new Font("Arial", 15));
 
         VBox chefBox = new VBox();
         chefBox.setSpacing(10);
         chefBox.setAlignment(Pos.TOP_CENTER);
         chefBox.getChildren().addAll(chefLabel, chefQueue);
         chefBox.setAlignment(Pos.BOTTOM_CENTER);
-        chefBox.getChildren().addAll(chefDetailsLabel);
+        chefBox.getChildren().addAll(chefDetailsLabelOne, chefDetailsLabelTwo);
 
         chefBoxes = makeChefQueue(database);
         for (int i = 0; i < boxes.length; i++)
@@ -247,14 +253,15 @@ public class OPA_FX_GUI extends HBox{
             // Sketchy, but get order number from the button pressed
             // if refreshButton is pressed...
             if(buttonText.compareTo("Refresh") == 0) {
-                detailsLabel.setText("");
+                detailsLabelOne.setText("");
+                detailsLabelTwo.setText("");
                 refresh();
             }
             else if(buttonText.substring(0,1).compareTo("S") == 0) {
                 // set status to "Processing". Then, call refresh().
 
                 int orderNum = Integer.parseInt(buttonText.substring(14));
-                database.changeOrderStatus(orderNum, "Processing");
+                database.changeOrderStatus(orderNum, "Processed");
 
                 // Send said order to chef's queue
                 /*Order currentOrder = database.getOrder(orderNum);
@@ -285,8 +292,10 @@ public class OPA_FX_GUI extends HBox{
                     toppings += " " + currentOrder.getPizza().getToppings()[i];
                 }
 
-                detailsLabel.setText("ASURITE ID: " + currentOrder.getAsu() + ", Order Number: " + currentOrder.getOrderNumber() + ", " + currentOrder.getPizza().getPizzaSize() + ", " + currentOrder.getPizza().getPizzaType() + ", Toppings: "
+                detailsLabelOne.setText("ASURITE ID: " + currentOrder.getAsu() + ", Order Number: " + currentOrder.getOrderNumber());
+                detailsLabelTwo.setText(currentOrder.getPizza().getPizzaSize() + ", " + currentOrder.getPizza().getPizzaType() + ", Toppings: "
                     + toppings);
+
 
             }
             else if(buttonText.substring(0,1).compareTo("D") == 0) {
@@ -298,7 +307,10 @@ public class OPA_FX_GUI extends HBox{
                     toppings += " " + currentOrder.getPizza().getToppings()[i];
                 }
 
-                chefDetailsLabel.setText("ASURITE ID: " + currentOrder.getAsu() + ", Order Number: " + currentOrder.getOrderNumber() + ", " + currentOrder.getPizza().getPizzaSize() + ", " + currentOrder.getPizza().getPizzaType() + ", Toppings: "
+                //chefDetailsLabel.setText("ASURITE ID: " + currentOrder.getAsu() + ", Order Number: " + currentOrder.getOrderNumber() + ", " + currentOrder.getPizza().getPizzaSize() + ", " + currentOrder.getPizza().getPizzaType() + ", Toppings: "
+                  //      + toppings);
+                chefDetailsLabelOne.setText("ASURITE ID: " + currentOrder.getAsu() + ", Order Number: " + currentOrder.getOrderNumber());
+                chefDetailsLabelTwo.setText(currentOrder.getPizza().getPizzaSize() + ", " + currentOrder.getPizza().getPizzaType() + ", Toppings: "
                         + toppings);
             }
         }
