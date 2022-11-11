@@ -44,8 +44,8 @@ public class ReturningCustomer extends Application {
 
 			// Create and format Title
 			Label title = new Label();
-			title.setLayoutX(201.0);
-			title.setLayoutY(14.0);
+			title.setLayoutX(482.0);
+			title.setLayoutY(133.0);
 			title.setPrefHeight(35.0);
 			title.setPrefWidth(252.0);
 			title.setText("Returning Customer");
@@ -59,10 +59,10 @@ public class ReturningCustomer extends Application {
 			ImageView fork = new ImageView(image);
 
 			// Format fork image
-			fork.setFitHeight(167.0);
-			fork.setFitWidth(97.0);
-			fork.setLayoutX(99.0);
-			fork.setLayoutY(67.0);
+			fork.setFitHeight(181.0);
+			fork.setFitWidth(104.0);
+			fork.setLayoutX(339.0);
+			fork.setLayoutY(229.0);
 			fork.setPickOnBounds(true);
 			fork.setPreserveRatio(true);
 
@@ -71,43 +71,43 @@ public class ReturningCustomer extends Application {
 			ImageView pizza = new ImageView(image2);
 
 			// Format pizza image
-			pizza.setFitHeight(130);
-			pizza.setFitWidth(180);
-			pizza.setLayoutX(376.0);
-			pizza.setLayoutY(86.0);
+			pizza.setFitHeight(204);
+			pizza.setFitWidth(252);
+			pizza.setLayoutX(741.0);
+			pizza.setLayoutY(229.0);
 			pizza.setPickOnBounds(true);
 			pizza.setPreserveRatio(true);
 
 			// Create and format New Order button
 			Button btnNewOrder = new Button();
-			btnNewOrder.setLayoutX(247.0);
-			btnNewOrder.setLayoutY(101.0);
+			btnNewOrder.setLayoutX(498.0);
+			btnNewOrder.setLayoutY(228);
 			btnNewOrder.setMnemonicParsing(false);
 			// btnNewOrder.setOnAction()
-			btnNewOrder.setPrefHeight(50.0);
-			btnNewOrder.setPrefWidth(106.0);
+			btnNewOrder.setPrefHeight(86.0);
+			btnNewOrder.setPrefWidth(174.0);
 			btnNewOrder.setText("Place New Order");
 
 			// Create and format Pizza Status button
 			Button btnPizzaStatus = new Button();
-			btnPizzaStatus.setLayoutX(235.0);
-			btnPizzaStatus.setLayoutY(307.0);
+			btnPizzaStatus.setLayoutX(507.0);
+			btnPizzaStatus.setLayoutY(431.0);
 			btnPizzaStatus.setMnemonicParsing(false);
 			// btnPizzaStatus.setOnAction()
-			btnPizzaStatus.setPrefHeight(35.0);
-			btnPizzaStatus.setPrefWidth(120.0);
+			btnPizzaStatus.setPrefHeight(86.0);
+			btnPizzaStatus.setPrefWidth(156.0);
 			btnPizzaStatus.setText("Check Pizza Status");
 
 			// Create and format a Text Field
 			TextField tfOrderNumber = new TextField();
-			tfOrderNumber.setLayoutX(213.0);
-			tfOrderNumber.setLayoutY(257.0);
+			tfOrderNumber.setLayoutX(499.0);
+			tfOrderNumber.setLayoutY(376);
 			tfOrderNumber.setPrefHeight(35.0);
-			tfOrderNumber.setPrefWidth(163.0);
+			tfOrderNumber.setPrefWidth(174.0);
 			tfOrderNumber.setPromptText("Order Number");
 
 			root = new AnchorPane();
-			scene = new Scene(root, 650, 400);
+			scene = new Scene(root, 1280, 720);
 
 			// Put children components into AnchorPane
 			root.getChildren().addAll(title, btnNewOrder, btnPizzaStatus, tfOrderNumber, fork, pizza);
@@ -118,7 +118,7 @@ public class ReturningCustomer extends Application {
 				public void handle(ActionEvent event) {
 					Database database = new Database();
 					newCustomerGui = new Customergui(database);
-					scene = new Scene(newCustomerGui, 1080, 720);
+					scene = new Scene(newCustomerGui, 1280, 720);
 					primaryStage.setScene(scene);
 					primaryStage.show();
 				}
@@ -133,7 +133,7 @@ public class ReturningCustomer extends Application {
 
 					// Create database/Add order to database
 					db = new Database();
-					db.createDatabase();
+					//db.createDatabase();
 
 					// Parse text from text field
 					String orderString = tfOrderNumber.getText(); // store order number input
