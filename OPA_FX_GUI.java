@@ -1,5 +1,4 @@
-package com.example.opa_fx_gui;
-
+package sample;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -139,7 +138,7 @@ public class OPA_FX_GUI extends HBox{
             Order currentOrder = orders.get(i);
 
             //each order will have value "unprocessed" before it is sent to the chef. Will change this to "processing"
-            if(currentOrder.getStatus().compareTo("Processed") == 0) {
+            if(currentOrder.getStatus().compareTo("Processing") == 0) {
                 // need a label for asurite, and possibly one for toppings/type
                 // also need a button that sends it to the chef's queue
                 Label asuriteLabel = new Label(currentOrder.getAsu());
@@ -177,11 +176,9 @@ public class OPA_FX_GUI extends HBox{
     private HBox[] makeChefQueue(Database database) {
        /* Label informationLabel = new Label("Asurite: " + order.getAsu() + " | Order number: " + order.getOrderNumber() + " | Status: " + order.getStatus());
         informationLabel.setFont(new Font("Arial", 12));
-
         VBox chefOrderDetailsBox = new VBox();
         chefOrderDetailsBox.setSpacing(10);
         chefOrderDetailsBox.getChildren().addAll(informationLabel);
-
         return chefOrderDetailsBox;*/
         //=================================================
 
@@ -294,7 +291,7 @@ public class OPA_FX_GUI extends HBox{
 
                 detailsLabelOne.setText("ASURITE ID: " + currentOrder.getAsu() + ", Order Number: " + currentOrder.getOrderNumber());
                 detailsLabelTwo.setText(currentOrder.getPizza().getPizzaSize() + ", " + currentOrder.getPizza().getPizzaType() + ", Toppings: "
-                    + toppings);
+                        + toppings);
 
 
             }
@@ -308,7 +305,7 @@ public class OPA_FX_GUI extends HBox{
                 }
 
                 //chefDetailsLabel.setText("ASURITE ID: " + currentOrder.getAsu() + ", Order Number: " + currentOrder.getOrderNumber() + ", " + currentOrder.getPizza().getPizzaSize() + ", " + currentOrder.getPizza().getPizzaType() + ", Toppings: "
-                  //      + toppings);
+                //      + toppings);
                 chefDetailsLabelOne.setText("ASURITE ID: " + currentOrder.getAsu() + ", Order Number: " + currentOrder.getOrderNumber());
                 chefDetailsLabelTwo.setText(currentOrder.getPizza().getPizzaSize() + ", " + currentOrder.getPizza().getPizzaType() + ", Toppings: "
                         + toppings);

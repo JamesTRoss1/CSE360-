@@ -1,3 +1,5 @@
+package sample;
+
 import java.util.Random;
 import java.io.*;
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ public class Database {
         file.delete();
     }
 
+    //clears the database
     public void createDatabase() {
         try {
             FileOutputStream fileOut = new FileOutputStream("orders.ser");
@@ -113,9 +116,16 @@ public class Database {
 
     public void printOrders() {
         ArrayList<Order> list = getAllOrders();
+        System.out.println("\n");
         for(int i = 0; i < list.size(); i++) {
-            System.out.println(list.get(i).getOrderNumber() + " : " + list.get(i).getStatus());
+            System.out.println("ASURITE: " + list.get(i).getAsu());
+            System.out.println("Order #: " + list.get(i).getOrderNumber());
+            System.out.println("Pizza: " + list.get(i).getPizza().toString());
+            System.out.println("Status: " + list.get(i).getStatus());
+            System.out.println("Price: " + list.get(i).getPrice());
+            System.out.println("Pickup Time: " + list.get(i).getPickup().toString());
         }
+        System.out.println("\n");
     }
 
     public boolean deleteOrder(int orderNum) {
@@ -135,10 +145,11 @@ public class Database {
 
     public int generateOrderNumber() {
         Random rd = new Random();
-        int orderNumber = rd.nextInt(Integer.MAX_VALUE);
+        int orderNumber = rd.nextInt(100);
         while(foundOrderNumber(orderNumber)) {
-          orderNumber = rd.nextInt(Integer.MAX_VALUE);
+          orderNumber = rd.nextInt(100);
         }
         return orderNumber;
     }
+
 }

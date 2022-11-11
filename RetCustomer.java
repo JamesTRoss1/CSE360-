@@ -1,4 +1,4 @@
-package application;
+package sample;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,125 +30,42 @@ public class RetCustomer extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			this.primaryStage = primaryStage;
-			InitialStatusWindow();
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
-	public void InitialStatusWindow() {
-		try {
-			// Create and format Title
-			Label title = new Label();
-			title.setLayoutX(210.0);
-			title.setLayoutY(140.0);
-			title.setPrefHeight(64.0);
-			title.setPrefWidth(172.0);
-			title.setText("Enter Order Number");
-			title.setTextAlignment(TextAlignment.CENTER);
-			title.setFont(Font.font("Arial", 18.0));
-
-			// Create and format a Text Field
-			TextField tfOrderNumber = new TextField();
-			tfOrderNumber.setLayoutX(210.0);
-			tfOrderNumber.setLayoutY(187.0);
-			tfOrderNumber.setPrefHeight(44.0);
-			tfOrderNumber.setPrefWidth(172.0);
-			tfOrderNumber.setPromptText("Order Number");
-
-			// Create and format Title (counter for Text Field)
-			Label counter = new Label();
-			counter.setLayoutX(354.0);
-			counter.setLayoutY(231.0);
-			counter.setPrefHeight(18.0);
-			counter.setPrefWidth(27.0);
-			counter.setText("0/12");
-			
-
-			Button btn = new Button();
-			btn.setLayoutX(396.0);
-			btn.setLayoutY(196.0);
-			btn.setMnemonicParsing(false);
-			btn.setPrefHeight(30.0);
-			btn.setPrefWidth(54.0);
-			btn.setText("ENTER");
-
-			root = new AnchorPane();
-			scene = new Scene(root, 650, 500);
-
-			// Put children components into AnchorPane
-			root.getChildren().addAll(title, tfOrderNumber, counter, btn);
-
-			
-			btn.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					// 1. Parse text from user and check to see if text input is valid
-					// 2. Check database to see if order number exists
-					// 3. If true, set button to go to order status page
-
-					// Make a order first
-					String[] array = { "Mushrooms", "Pepperoni" };
-					Pizza pizza = new Pizza(array, "Large", "Cheese");
-					Order sampleOrder = new Order(1, 0, "pc01", pizza, 30); // first argument is the order number
-					int order_num = sampleOrder.getOrderNumber();
-
-					// Parse text from user
-					String orderString = tfOrderNumber.getText(); // store order number input
-					String trimorderString = orderString.trim(); // trim whitespace
-					int orderNum = Integer.parseInt(trimorderString); // Parse String into integer
-
-					// Create database/Add order to database
-					db = new Database();
-					db.createDatabase();
-					db.addOrder(sampleOrder);
-					// Check if particular order number is in database
-					if (db.foundOrderNumber(order_num) == true) {
-						
-						if(orderNum <= 0) {
-							tfOrderNumber.clear();
-							tfOrderNumber.setStyle("-fx-prompt-text-fill: red;");
-							tfOrderNumber.setPromptText("Invalid Order Number");
-
-						}
-						else if(!trimorderString.matches("[0-9]+")) {
-							tfOrderNumber.clear();
-							tfOrderNumber.setStyle("-fx-prompt-text-fill: red;");
-							tfOrderNumber.setPromptText("Invalid Order Number");
-						}
-						else {
-							InitialWaitingWindow(); // Go to the next page
-						}
-						
-					} else {
-						tfOrderNumber.setPromptText("Incorrect order number");
-					}
-
-				}
-			});
-
-		} catch (Exception e) {
-			e.printStackTrace();
+	public void go(int index, int tfOrderNumber) {
+		Database db = new Database();
+		if(index == 0) {
+			ProcessingWaitingWindow(db, tfOrderNumber);
 		}
-		primaryStage.setScene(scene);
-		primaryStage.show();
+		if(index == 1) {
+			InitialWaitingWindow(db, tfOrderNumber);
+		}
+		if(index == 2) {
+			IntermediateWaitingWindow(db, tfOrderNumber);
+		}
+		if(index == 3) {
+			FinishedWaitingWindow(db, tfOrderNumber);
+		}
 	}
 
-	public void InitialWaitingWindow() {
+	public void ProcessingWaitingWindow(Database db1, int tfOrderNumber) {
 		try {
-			
-			// Make a order first
-			String[] array = { "Mushrooms", "Pepperoni" };
-			Pizza pizza_ = new Pizza(array, "Large", "Cheese");
-			Order sampleOrder = new Order(1, 0, "pc01", pizza_, 30); // first argument is the order number
-			
+
+			// Initialize again
+			db = db1;
+			int argtfOrderNumber = tfOrderNumber;
+			Order order = db.getOrder(argtfOrderNumber);
+
+
 			Label orderNumber = new Label();
 			orderNumber.setLayoutX(54.0);
 			orderNumber.setLayoutY(39.0);
 			orderNumber.setPrefHeight(35.0);
 			orderNumber.setPrefWidth(254.0);
-			orderNumber.setText("For: " + sampleOrder.getAsu());
+			orderNumber.setText("For: " + order.getAsu());
 			orderNumber.setFont(Font.font("Arial", 18.0));
 
 			Label for_Label = new Label();
@@ -156,7 +73,7 @@ public class RetCustomer extends Application {
 			for_Label.setLayoutY(74.0);
 			for_Label.setPrefHeight(35.0);
 			for_Label.setPrefWidth(254.0);
-			for_Label.setText("Order Number: " + sampleOrder.getOrderNumber());
+			for_Label.setText("Order Number: " + order.getOrderNumber());
 			for_Label.setFont(Font.font("Arial", 18.0));
 
 			Label orderStatus = new Label();
@@ -173,7 +90,7 @@ public class RetCustomer extends Application {
 			progressbar.setLayoutY(217.0);
 			progressbar.setPrefHeight(35.0);
 			progressbar.setPrefWidth(231.0);
-			progressbar.setProgress(0.33);
+			progressbar.setProgress(0.25);
 
 			// relative path for images
 			String basePath = new File("").getAbsolutePath();
@@ -200,47 +117,49 @@ public class RetCustomer extends Application {
 			pizza.setLayoutY(200.0);
 			pizza.setPickOnBounds(true);
 			pizza.setPreserveRatio(true);
-			
+
 			Button btn = new Button();
 			btn.setLayoutX(142.0);
 			btn.setLayoutY(297.0);
 			btn.setMnemonicParsing(false);
-			btn.setText("Next");
+			btn.setText("Back");
 
 			root = new AnchorPane();
-			scene = new Scene(root, 650, 500);
+			scene = new Scene(root, 1280, 720);
 
 			root.getChildren().addAll(orderNumber, for_Label, orderStatus, progressbar, fork, pizza, btn);
 
-			
+
 			btn.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
-					IntermediateWaitingWindow();
+					ReturningCustomer rtc = new ReturningCustomer();
+					rtc.start(primaryStage);
 				}
 			});
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
-	
-	public void IntermediateWaitingWindow() {
+
+	public void InitialWaitingWindow(Database db1, int tfOrderNumber) {
 		try {
-			
-			// Make a order first
-			String[] array = { "Mushrooms", "Pepperoni" };
-			Pizza pizza_ = new Pizza(array, "Large", "Cheese");
-			Order sampleOrder = new Order(1, 0, "pc01", pizza_, 30); // first argument is the order number
-			
+
+			// Initialize again
+			db = db1;
+			int argtfOrderNumber = tfOrderNumber;
+			Order order = db.getOrder(argtfOrderNumber);
+
+
 			Label orderNumber = new Label();
 			orderNumber.setLayoutX(54.0);
 			orderNumber.setLayoutY(39.0);
 			orderNumber.setPrefHeight(35.0);
 			orderNumber.setPrefWidth(254.0);
-			orderNumber.setText("For: " + sampleOrder.getAsu());
+			orderNumber.setText("For: " + order.getAsu());
 			orderNumber.setFont(Font.font("Arial", 18.0));
 
 			Label for_Label = new Label();
@@ -248,7 +167,100 @@ public class RetCustomer extends Application {
 			for_Label.setLayoutY(74.0);
 			for_Label.setPrefHeight(35.0);
 			for_Label.setPrefWidth(254.0);
-			for_Label.setText("Order Number: " + sampleOrder.getOrderNumber());
+			for_Label.setText("Order Number: " + order.getOrderNumber());
+			for_Label.setFont(Font.font("Arial", 18.0));
+
+			Label orderStatus = new Label();
+			orderStatus.setLayoutX(54.0);
+			orderStatus.setLayoutY(135.0);
+			orderStatus.setPrefHeight(35.0);
+			orderStatus.setPrefWidth(297.0);
+			orderStatus.setText("Order Status: waiting to be cooked");
+			orderStatus.setFont(Font.font("Arial", 18.0));
+			orderStatus.setTextFill(Paint.valueOf("#f70000"));
+
+			ProgressBar progressbar = new ProgressBar();
+			progressbar.setLayoutX(54.0);
+			progressbar.setLayoutY(217.0);
+			progressbar.setPrefHeight(35.0);
+			progressbar.setPrefWidth(231.0);
+			progressbar.setProgress(0.50);
+
+			// relative path for images
+			String basePath = new File("").getAbsolutePath();
+			Image image = new Image(new FileInputStream(basePath + "/forksundevil.png"));
+			// Setting the image view for fork logo
+			ImageView fork = new ImageView(image);
+
+			// Format fork image
+			fork.setFitHeight(110.0);
+			fork.setFitWidth(94.0);
+			fork.setLayoutX(496.0);
+			fork.setLayoutY(14.0);
+			fork.setPickOnBounds(true);
+			fork.setPreserveRatio(true);
+
+			Image image2 = new Image(new FileInputStream(basePath + "/pizza_poster.jpg"));
+			// Setting the image view for pizza logo
+			ImageView pizza = new ImageView(image2);
+
+			// Format pizza image
+			pizza.setFitHeight(250.0);
+			pizza.setFitWidth(300.0);
+			pizza.setLayoutX(352.0);
+			pizza.setLayoutY(200.0);
+			pizza.setPickOnBounds(true);
+			pizza.setPreserveRatio(true);
+
+			Button btn = new Button();
+			btn.setLayoutX(142.0);
+			btn.setLayoutY(297.0);
+			btn.setMnemonicParsing(false);
+			btn.setText("Back");
+
+			root = new AnchorPane();
+			scene = new Scene(root, 1280, 720);
+
+			root.getChildren().addAll(orderNumber, for_Label, orderStatus, progressbar, fork, pizza, btn);
+
+
+			btn.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					ReturningCustomer rtc = new ReturningCustomer();
+					rtc.start(primaryStage);
+				}
+			});
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		primaryStage.setScene(scene);
+		primaryStage.show();
+	}
+
+	public void IntermediateWaitingWindow(Database db1, int tfOrderNumber) {
+		try {
+
+			// Initialize again
+			db = db1;
+			int argtfOrderNumber = tfOrderNumber;
+			Order order = db.getOrder(argtfOrderNumber);
+
+			Label orderNumber = new Label();
+			orderNumber.setLayoutX(54.0);
+			orderNumber.setLayoutY(39.0);
+			orderNumber.setPrefHeight(35.0);
+			orderNumber.setPrefWidth(254.0);
+			orderNumber.setText("For: " + order.getAsu());
+			orderNumber.setFont(Font.font("Arial", 18.0));
+
+			Label for_Label = new Label();
+			for_Label.setLayoutX(54.0);
+			for_Label.setLayoutY(74.0);
+			for_Label.setPrefHeight(35.0);
+			for_Label.setPrefWidth(254.0);
+			for_Label.setText("Order Number: " + order.getOrderNumber());
 			for_Label.setFont(Font.font("Arial", 18.0));
 
 			Label orderStatus = new Label();
@@ -265,7 +277,7 @@ public class RetCustomer extends Application {
 			progressbar.setLayoutY(217.0);
 			progressbar.setPrefHeight(35.0);
 			progressbar.setPrefWidth(231.0);
-			progressbar.setProgress(0.66);
+			progressbar.setProgress(0.75);
 
 			// relative path for images
 			String basePath = new File("").getAbsolutePath();
@@ -292,47 +304,48 @@ public class RetCustomer extends Application {
 			pizza.setLayoutY(200.0);
 			pizza.setPickOnBounds(true);
 			pizza.setPreserveRatio(true);
-			
+
 			Button btn = new Button();
 			btn.setLayoutX(142.0);
 			btn.setLayoutY(297.0);
 			btn.setMnemonicParsing(false);
-			btn.setText("Next");
+			btn.setText("Back");
 
 			root = new AnchorPane();
-			scene = new Scene(root, 650, 500);
+			scene = new Scene(root, 1280, 720);
 
 			root.getChildren().addAll(orderNumber, for_Label, orderStatus, progressbar, fork, pizza, btn);
 
 			btn.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
-					FinishedWaitingWindow();
+					ReturningCustomer rtc = new ReturningCustomer();
+					rtc.start(primaryStage);
 				}
 			});
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
-	
-	public void FinishedWaitingWindow() {
+
+	public void FinishedWaitingWindow(Database db1, int tfOrderNumber) {
 		try {
-			
-			// Make a order first
-			String[] array = { "Mushrooms", "Pepperoni" };
-			Pizza pizza_ = new Pizza(array, "Large", "Cheese");
-			Order sampleOrder = new Order(1, 0, "pc01", pizza_, 30); // first argument is the order number
-			
+
+			db = db1;
+			int argtfOrderNumber = tfOrderNumber;
+			Order order = db.getOrder(argtfOrderNumber);
+
+
 			Label orderNumber = new Label();
 			orderNumber.setLayoutX(54.0);
 			orderNumber.setLayoutY(39.0);
 			orderNumber.setPrefHeight(35.0);
 			orderNumber.setPrefWidth(254.0);
-			orderNumber.setText("For: " + sampleOrder.getAsu());
+			orderNumber.setText("For: " + order.getAsu());
 			orderNumber.setFont(Font.font("Arial", 18.0));
 
 			Label for_Label = new Label();
@@ -340,7 +353,7 @@ public class RetCustomer extends Application {
 			for_Label.setLayoutY(74.0);
 			for_Label.setPrefHeight(35.0);
 			for_Label.setPrefWidth(254.0);
-			for_Label.setText("Order Number: " + sampleOrder.getOrderNumber());
+			for_Label.setText("Order Number: " + order.getOrderNumber());
 			for_Label.setFont(Font.font("Arial", 18.0));
 
 			Label orderStatus = new Label();
@@ -357,7 +370,7 @@ public class RetCustomer extends Application {
 			progressbar.setLayoutY(217.0);
 			progressbar.setPrefHeight(35.0);
 			progressbar.setPrefWidth(231.0);
-			progressbar.setProgress(1); 
+			progressbar.setProgress(1);
 
 			// relative path for images
 			String basePath = new File("").getAbsolutePath();
@@ -384,7 +397,7 @@ public class RetCustomer extends Application {
 			pizza.setLayoutY(200.0);
 			pizza.setPickOnBounds(true);
 			pizza.setPreserveRatio(true);
-			
+
 
 			root = new AnchorPane();
 			scene = new Scene(root, 650, 500);

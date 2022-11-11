@@ -1,3 +1,7 @@
+package sample;
+
+import java.util.Arrays;
+
 public class Pizza implements java.io.Serializable
 {
     private String[] toppings;
@@ -11,6 +15,14 @@ public class Pizza implements java.io.Serializable
         this.pizzaType = pizzaType;
     }
 
+    @Override
+    public String toString() {
+        String str = "\n";
+        str = str + "Pizza size: " + pizzaSize + "\n";
+        str = str + "Pizza type: " + pizzaType + "\n";
+        str = str + "Toppings: " + Arrays.toString(toppings);
+        return str;
+    }
     public String[] getToppings() {
         return toppings;
     }

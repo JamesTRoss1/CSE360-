@@ -1,3 +1,5 @@
+package sample;
+
 import javafx.event.ActionEvent; //**Need to import
 import javafx.event.EventHandler; //**Need to import
 
@@ -15,6 +17,7 @@ import java.util.ArrayList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.stage.Stage;
 
 public class ChefGUI extends HBox
 {
@@ -134,7 +137,7 @@ public class ChefGUI extends HBox
 			Order currentOrder = orders.get(i); // Get the current order
 			
 			// Make an HBox if the order status is Processed or Cooking
-			if (currentOrder.getStatus().compareTo("Processing") == 0 ||
+			if (currentOrder.getStatus().compareTo("Processed") == 0 ||
 			    currentOrder.getStatus().compareTo("Cooking") == 0)
 			{
 				// Create a label to hold the ASURITE ID
