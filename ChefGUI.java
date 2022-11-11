@@ -60,6 +60,16 @@ public class ChefGUI extends HBox
 		Button refreshButton = new Button("Refresh");
 		refreshButton.setOnAction(new ButtonHandler());
 		
+		// Create a button that deletes finished orders from the order list
+		Button deleteButton = new Button("Delete Finished");
+		deleteButton.setOnAction(new ButtonHandler());
+		
+		// Create a box to hold the buttons
+		HBox buttonBox = new HBox();
+		buttonBox.getChildren().addAll(refreshButton, deleteButton);
+		buttonBox.setAlignment(Pos.CENTER);
+		buttonBox.setSpacing(10);
+		
 		// Create a label that informs the chef what this is about
 		Label incOrdersLabel = new Label("Incoming Orders");
 		incOrdersLabel.setFont(new Font("Arial", 18));
@@ -70,7 +80,7 @@ public class ChefGUI extends HBox
 		VBox queueBox = new VBox();
 		queueBox.setSpacing(10);
 		queueBox.setAlignment(Pos.TOP_CENTER);
-		queueBox.getChildren().addAll(incOrdersLabel, orderList, refreshButton);
+		queueBox.getChildren().addAll(incOrdersLabel, orderList, buttonBox);
 		VBox.setVgrow(queueBox, Priority.ALWAYS);
 		//-------------------------------------------------------
 
@@ -134,7 +144,7 @@ public class ChefGUI extends HBox
 			Order currentOrder = orders.get(i); // Get the current order
 			
 			// Make an HBox if the order status is Processed or Cooking
-			if (currentOrder.getStatus().compareTo("Processing") == 0 ||
+			if (currentOrder.getStatus().compareTo("Processed") == 0 ||
 			    currentOrder.getStatus().compareTo("Cooking") == 0)
 			{
 				// Create a label to hold the ASURITE ID
@@ -285,6 +295,21 @@ public class ChefGUI extends HBox
 				
 				RefreshList(); // Update the list
 				//-------------------------------------------------
+			}
+			
+			else if (text.substring(0, 1).compareTo("D") == 0)
+			{
+				ArrayList<Order> orders = database.getAllOrders();
+				
+				for (int i = 0; i < orders.size(); i++)
+				{
+					Order currentOrder = orders.get(i); // Get the current order
+					
+					if (currentOrder.getStatus().compareTo("Finished") == 0)
+					{
+						database.deleteOrder(currentOrder.getOrderNumber());
+					}
+				}
 			}
 			
 		}
