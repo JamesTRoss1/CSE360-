@@ -81,6 +81,7 @@ public class OPA_FX_GUI extends HBox{
         VBox.setVgrow(incomingBox, Priority.ALWAYS);
         //--------------------
         chefQueue = new VBox();
+
         chefQueue.setPadding(margin);
         chefQueue.setSpacing(10);
         ScrollPane chefScroll = new ScrollPane();
@@ -103,6 +104,15 @@ public class OPA_FX_GUI extends HBox{
         chefBox.setAlignment(Pos.BOTTOM_CENTER);
         chefBox.getChildren().addAll(chefDetailsLabel);
 
+        chefBoxes = makeChefQueue(database);
+        for (int i = 0; i < boxes.length; i++)
+        {
+            if (chefBoxes[i] != null)
+            {
+                chefQueue.getChildren().add(chefBoxes[i]);
+            }
+        }
+
         this.getChildren().addAll(incomingBox, chefBox);
         this.setPadding(margin);
         HBox.setHgrow(incomingBox, Priority.ALWAYS);
@@ -123,7 +133,7 @@ public class OPA_FX_GUI extends HBox{
             Order currentOrder = orders.get(i);
 
             //each order will have value "unprocessed" before it is sent to the chef. Will change this to "processing"
-            if(currentOrder.getStatus().compareTo("unprocessed") == 0) {
+            if(currentOrder.getStatus().compareTo("Processing") != 0) {
                 // need a label for asurite, and possibly one for toppings/type
                 // also need a button that sends it to the chef's queue
                 Label asuriteLabel = new Label(currentOrder.getAsu());
