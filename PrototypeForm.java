@@ -1,3 +1,5 @@
+package sample;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -57,7 +59,7 @@ public class PrototypeForm extends JFrame {
                 Pizza pizza = new Pizza(toppings, "Large", pizzaType);
                 Order order = new Order(database.generateOrderNumber(), 99.99, asurite, pizza, 30);
                 database.addOrder(order);
-                PlacementLabel.setText("Your order number is: " + Integer.toString(order.orderNumber));
+                PlacementLabel.setText("Your order number is: " + Integer.toString(order.getOrderNumber()));
             }
         });
         checkStatusButton.addActionListener(new ActionListener() {
@@ -68,13 +70,13 @@ public class PrototypeForm extends JFrame {
                     statusLabel.setText("Order not found");
                 }
                 else {
-                    statusLabel.setText("Your order status: " + order.status);
+                    statusLabel.setText("Your order status: " + order.getStatus());
                 }
             }
         });
     }
 
-    public static void main(String[] args) {
+    public static void protoForm() {
             database = new Database();
             PrototypeForm h = new PrototypeForm();
             h.setContentPane(h.mainPanel);

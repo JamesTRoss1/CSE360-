@@ -22,11 +22,12 @@ import javafx.stage.Stage;
 import java.io.*;
 
 public class Main extends Application {
+    //class attributes
+    public static Stage primaryStage;
     public GridPane root;
-    public Scene scene;
+    public static Scene scene;
     public VBox vbox;
     private boolean valid = false;
-    public Stage primaryStage;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -36,6 +37,7 @@ public class Main extends Application {
 
     public void toInitialGUI() throws Exception {
         String basePath = new File("").getAbsolutePath();
+        //get the absolute path in order to work on any machine
         Image image = new Image(new FileInputStream(basePath + "/back_arrow.png"));
         //Setting the image view
         ImageView imageView = new ImageView(image);
@@ -47,13 +49,16 @@ public class Main extends Application {
         //Setting the image view
         ImageView imageView3 = new ImageView(image3);
         Image img = new Image(new FileInputStream(basePath + "/asu_white.jpg"));
+        //gui elements
         Label title = new Label("Welcome To Sun Devil Pizza");
         Button customerButton =new Button ("I am a Customer");
         Button chefButton = new Button("I am a Chef");
         Button orderProcButton = new Button("I am a Order Processor");
+        Button debugButton = new Button("View Log");
         root = new GridPane();
         vbox = new VBox();
         scene = new Scene(root);
+        //columns and rows for formatting
         ColumnConstraints cons1 = new ColumnConstraints();
         cons1.setHgrow(Priority.NEVER);
         root.getColumnConstraints().add(cons1);
@@ -64,12 +69,17 @@ public class Main extends Application {
         rcons1.setVgrow(Priority.NEVER);
         RowConstraints rcons2 = new RowConstraints();
         rcons2.setVgrow(Priority.ALWAYS);
+        //add elements to the pane and the vbox
         root.getRowConstraints().addAll(rcons1, rcons2);
-        vbox.getChildren().addAll(title, new Text(" "), customerButton, new Text(" "), new Text(" "), orderProcButton, new Text(" "), chefButton);
+        vbox.getChildren().addAll(title, new Text(" "), customerButton, new Text(" "),
+                new Text(" "), orderProcButton, new Text(" "), chefButton, new Text(" "),
+                new Text(" "), debugButton
+        );
         root.add(vbox, 3, 0, 5, 5);
         root.add(imageView, 0, 0, 1, 1);
         root.add(imageView3, 0, 0, 3, 3);
         root.add(imageView2, 9, 0, 3, 3);
+        //resize images and have callback
         imageView.setFitHeight(20);
         imageView.setFitWidth(20);
         imageView2.setFitWidth(220);
@@ -84,6 +94,7 @@ public class Main extends Application {
 
             }
         });
+        //formatting
         title.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         title.setAlignment(Pos.CENTER);
         customerButton.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
@@ -102,10 +113,15 @@ public class Main extends Application {
                 new BackgroundSize(50, 50, false, false, true, false));
         Background bGround = new Background(bImg);
         root.setBackground(bGround);
+        //event handlers for buttons
         customerButton.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
-                toCustomerGUI();
+                try {
+                    toCustomerGUI();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
             }
         });
         chefButton.setOnAction(new EventHandler() {
@@ -118,6 +134,13 @@ public class Main extends Application {
             @Override
             public void handle(Event event) {
                 toValidationGUI("op");
+            }
+        });
+        debugButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Database db = new Database();
+                db.printOrders();
             }
         });
         primaryStage.setScene(scene);
@@ -195,16 +218,27 @@ public class Main extends Application {
             }});
     }
 
-    public void toCustomerGUI() {
-
+    public void toCustomerGUI() throws Exception {
+        ReturningCustomer ret = new ReturningCustomer();
+        ret.start(primaryStage);
     }
 
     public void toChefGUI() {
-        System.out.println("To Chef");
+        Database db = new Database();
+        ChefGUI chef = new ChefGUI(db);
+        scene = new Scene(chef, 1280, 720);
+        //scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 
     public void toOrderProcessorGUI() {
-        System.out.println("To Order Processor");
+        Database db = new Database();
+        OPA_FX_GUI op = new OPA_FX_GUI(db);
+        scene = new Scene(op, 1280, 720);
+        //scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 
     public static void main(String[] args) {

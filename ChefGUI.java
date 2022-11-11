@@ -1,3 +1,5 @@
+package sample;
+
 import javafx.event.ActionEvent; //**Need to import
 import javafx.event.EventHandler; //**Need to import
 
@@ -15,6 +17,7 @@ import java.util.ArrayList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.stage.Stage;
 
 public class ChefGUI extends HBox
 {
