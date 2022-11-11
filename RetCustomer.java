@@ -1,6 +1,6 @@
 package application;
 
-import java.io.File;
+import java.io.File; 
 import java.io.FileInputStream;
 
 import javafx.application.Application;
@@ -25,20 +25,24 @@ public class RetCustomer extends Application {
 	private Scene scene;
 	private Stage primaryStage;
 	private Database db;
+	private ChefGUI chefGui;
 
 	@Override
 	public void start(Stage primaryStage) {
 		try {
 			this.primaryStage = primaryStage;
-			InitialStatusWindow();
+			InitialStatusWindow(db);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void InitialStatusWindow() {
+	public void InitialStatusWindow(Database db1) {
 		try {
+			
+			db = db1; // Pass in database
+			
 			// Create and format Title
 			Label title = new Label();
 			title.setLayoutX(210.0);
@@ -94,37 +98,45 @@ public class RetCustomer extends Application {
 					Order sampleOrder = new Order(1, 0, "pc01", pizza, 30); // first argument is the order number
 					int order_num = sampleOrder.getOrderNumber();
 
-					// Parse text from user
+					// Parse text from text field
 					String orderString = tfOrderNumber.getText(); // store order number input
 					String trimorderString = orderString.trim(); // trim whitespace
 					int orderNum = Integer.parseInt(trimorderString); // Parse String into integer
 
 					// Create database/Add order to database
 					db = new Database();
-					db.createDatabase();
+					//db.createDatabase();
 					db.addOrder(sampleOrder);
+					
+					
+					
 					// Check if particular order number is in database
 					if (db.foundOrderNumber(order_num) == true) {
 						
-						if(orderNum <= 0) {
-							tfOrderNumber.clear();
-							tfOrderNumber.setStyle("-fx-prompt-text-fill: red;");
-							tfOrderNumber.setPromptText("Invalid Order Number");
-
-						}
-						else if(!trimorderString.matches("[0-9]+")) {
-							tfOrderNumber.clear();
-							tfOrderNumber.setStyle("-fx-prompt-text-fill: red;");
-							tfOrderNumber.setPromptText("Invalid Order Number");
+						if(orderNum == order_num) {
+							Order order = db.getOrder(sampleOrder.getOrderNumber());
+							//order.setStatus("PROCESSING");
+							System.out.println(order.getStatus()); 
+							
+							if(order.getStatus().toUpperCase() == "PROCESSING") { // part 1 doc says ACCEPTED
+								InitialWaitingWindow();
+							}
+							else if(order.getStatus().toUpperCase() == "COOKING") {
+								IntermediateWaitingWindow();
+							}
+							else if(order.getStatus().toUpperCase() == "READY") {
+								FinishedWaitingWindow();
+							}
+							else {
+								//
+							}
 						}
 						else {
-							InitialWaitingWindow(); // Go to the next page
+							tfOrderNumber.clear();
+							tfOrderNumber.setStyle("-fx-prompt-text-fill: red;");
+							tfOrderNumber.setPromptText("Invalid Order Number");
 						}
-						
-					} else {
-						tfOrderNumber.setPromptText("Incorrect order number");
 					}
-
 				}
 			});
 
@@ -205,7 +217,7 @@ public class RetCustomer extends Application {
 			btn.setLayoutX(142.0);
 			btn.setLayoutY(297.0);
 			btn.setMnemonicParsing(false);
-			btn.setText("Next");
+			btn.setText("Back");
 
 			root = new AnchorPane();
 			scene = new Scene(root, 650, 500);
@@ -216,7 +228,7 @@ public class RetCustomer extends Application {
 			btn.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
-					IntermediateWaitingWindow();
+					InitialStatusWindow(db);
 				}
 			});
 			
@@ -297,7 +309,7 @@ public class RetCustomer extends Application {
 			btn.setLayoutX(142.0);
 			btn.setLayoutY(297.0);
 			btn.setMnemonicParsing(false);
-			btn.setText("Next");
+			btn.setText("Back");
 
 			root = new AnchorPane();
 			scene = new Scene(root, 650, 500);
@@ -307,7 +319,7 @@ public class RetCustomer extends Application {
 			btn.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
-					FinishedWaitingWindow();
+					InitialStatusWindow(db);
 				}
 			});
 			
