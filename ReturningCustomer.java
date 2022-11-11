@@ -1,6 +1,6 @@
 package application;
 
-import java.io.File;  
+import java.io.File;
 import java.io.FileInputStream;
 
 import javafx.application.Application;
@@ -17,16 +17,15 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
-
 public class ReturningCustomer extends Application {
-	
+
 	private AnchorPane root;
 	private Scene scene;
 	private Stage primaryStage;
 	private Database db;
 	private Customergui newCustomerGui;
 	private RetCustomer retCustomer;
-	
+
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -38,138 +37,147 @@ public class ReturningCustomer extends Application {
 		}
 	}
 
-	
 	public void CustomerGUI(Database db1) {
-	    try {
-	    	
-	    	db = db1; // Pass in database
-	    	
-	    	 // Create and format Title
-	    	 Label title = new Label();
-		     title.setLayoutX(201.0);
-		     title.setLayoutY(14.0);
-		     title.setPrefHeight(35.0);
-		     title.setPrefWidth(252.0);
-		     title.setText("Returning Customer");
-		     title.setTextAlignment(TextAlignment.CENTER);
-		     title.setFont(Font.font(24));
-	    	
-	    	// relative path for images
-	    	String basePath = new File("").getAbsolutePath();
-	        Image image = new Image(new FileInputStream(basePath + "/forksundevil.png"));
-	        //Setting the image view for fork logo
-	        ImageView fork = new ImageView(image);
-	        
-	        // Format fork image
-	        fork.setFitHeight(167.0);
-	        fork.setFitWidth(97.0);
-	        fork.setLayoutX(99.0);
-	        fork.setLayoutY(67.0);
-	        fork.setPickOnBounds(true);
-	        fork.setPreserveRatio(true);
-	        
-	        Image image2 = new Image(new FileInputStream(basePath + "/pepperoni_pizza.jpeg"));
-	        //Setting the image view for pizza logo
-	        ImageView pizza = new ImageView(image2);
-	        
-	        // Format pizza image
-	        pizza.setFitHeight(130);
-	        pizza.setFitWidth(180);
-	        pizza.setLayoutX(376.0);
-	        pizza.setLayoutY(86.0);
-	        pizza.setPickOnBounds(true);
-	        pizza.setPreserveRatio(true);
-	        
-	        // Create and format New Order button
-	        Button btnNewOrder = new Button();
-	        btnNewOrder.setLayoutX(247.0);
-	        btnNewOrder.setLayoutY(101.0);
-	        btnNewOrder.setMnemonicParsing(false);
-	        //btnNewOrder.setOnAction()
-	        btnNewOrder.setPrefHeight(50.0);
-	        btnNewOrder.setPrefWidth(106.0);
-	        btnNewOrder.setText("Place New Order");
-	        
-	        // Create and format Pizza Status button
-	        Button btnPizzaStatus = new Button();
-	        btnPizzaStatus.setLayoutX(235.0);
-	        btnPizzaStatus.setLayoutY(307.0);
-	        btnPizzaStatus.setMnemonicParsing(false);
-	        //btnPizzaStatus.setOnAction()
-	        btnPizzaStatus.setPrefHeight(35.0);
-	        btnPizzaStatus.setPrefWidth(120.0);
-	        btnPizzaStatus.setText("Check Pizza Status");
-	        
-	        // Create and format a Text Field 
-	        TextField tfOrderNumber = new TextField();
-	        tfOrderNumber.setLayoutX(213.0);
-	        tfOrderNumber.setLayoutY(257.0);
-	        tfOrderNumber.setPrefHeight(35.0);
-	        tfOrderNumber.setPrefWidth(163.0);
-	        tfOrderNumber.setPromptText("Order Number");
-	        
-	        root = new AnchorPane();
-	        scene = new Scene(root, 650, 400); 
-	        
-	        // Put children components into AnchorPane
-	        root.getChildren().addAll(title, btnNewOrder, btnPizzaStatus, tfOrderNumber, fork, pizza);
-	        
-	        // If New Order button is pressed, go to the New Customer Order Page
-	        btnNewOrder.setOnAction(new EventHandler<ActionEvent>() {
-	            @Override
-	            public void handle(ActionEvent event) {
-	            	Database database = new Database();
-	            	newCustomerGui = new Customergui(database);
-	            	scene = new Scene(newCustomerGui, 1080, 720);
-	            	primaryStage.setScene(scene);
-	                primaryStage.show();
-	            }
-	        });
-	        
-	        btnPizzaStatus.setOnAction(new EventHandler<ActionEvent>() {
-	            @Override
-	            public void handle(ActionEvent event) {
-	
-	            	String[] array = {"Mushrooms", "Pepperoni"};
-	            	Pizza pizza = new Pizza(array, "Large", "Cheese");
-	            	Order sampleOrder = new Order(1, 0, "pc01", pizza, 30);
-	            	
-	            	int pcordernum = sampleOrder.getOrderNumber(); // order number is 1 in this case
-	            	String status = sampleOrder.getStatus(); // default: "Processing"
-	            	
-	            	String orderString = tfOrderNumber.getText(); // store order number input
-	            	
-	        		int orderNum = Integer.parseInt(orderString);
-	        		
-	        		// Checks if the orderNumber matches any from the db and prints out 
-	        		// order status if match is found. Otherwise, print out some error statement.
-	        		if(pcordernum == orderNum) {	
-		            	retCustomer = new RetCustomer();
-		            	retCustomer.start(primaryStage);
-	        		}
-	        		//else if() {
-	        			// Implement some error
-	        		//}
-	        		else {
-	        			tfOrderNumber.clear();
+		try {
+
+			db = db1; // Pass in database
+
+			// Create and format Title
+			Label title = new Label();
+			title.setLayoutX(201.0);
+			title.setLayoutY(14.0);
+			title.setPrefHeight(35.0);
+			title.setPrefWidth(252.0);
+			title.setText("Returning Customer");
+			title.setTextAlignment(TextAlignment.CENTER);
+			title.setFont(Font.font(24));
+
+			// relative path for images
+			String basePath = new File("").getAbsolutePath();
+			Image image = new Image(new FileInputStream(basePath + "/forksundevil.png"));
+			// Setting the image view for fork logo
+			ImageView fork = new ImageView(image);
+
+			// Format fork image
+			fork.setFitHeight(167.0);
+			fork.setFitWidth(97.0);
+			fork.setLayoutX(99.0);
+			fork.setLayoutY(67.0);
+			fork.setPickOnBounds(true);
+			fork.setPreserveRatio(true);
+
+			Image image2 = new Image(new FileInputStream(basePath + "/pepperoni_pizza.jpeg"));
+			// Setting the image view for pizza logo
+			ImageView pizza = new ImageView(image2);
+
+			// Format pizza image
+			pizza.setFitHeight(130);
+			pizza.setFitWidth(180);
+			pizza.setLayoutX(376.0);
+			pizza.setLayoutY(86.0);
+			pizza.setPickOnBounds(true);
+			pizza.setPreserveRatio(true);
+
+			// Create and format New Order button
+			Button btnNewOrder = new Button();
+			btnNewOrder.setLayoutX(247.0);
+			btnNewOrder.setLayoutY(101.0);
+			btnNewOrder.setMnemonicParsing(false);
+			// btnNewOrder.setOnAction()
+			btnNewOrder.setPrefHeight(50.0);
+			btnNewOrder.setPrefWidth(106.0);
+			btnNewOrder.setText("Place New Order");
+
+			// Create and format Pizza Status button
+			Button btnPizzaStatus = new Button();
+			btnPizzaStatus.setLayoutX(235.0);
+			btnPizzaStatus.setLayoutY(307.0);
+			btnPizzaStatus.setMnemonicParsing(false);
+			// btnPizzaStatus.setOnAction()
+			btnPizzaStatus.setPrefHeight(35.0);
+			btnPizzaStatus.setPrefWidth(120.0);
+			btnPizzaStatus.setText("Check Pizza Status");
+
+			// Create and format a Text Field
+			TextField tfOrderNumber = new TextField();
+			tfOrderNumber.setLayoutX(213.0);
+			tfOrderNumber.setLayoutY(257.0);
+			tfOrderNumber.setPrefHeight(35.0);
+			tfOrderNumber.setPrefWidth(163.0);
+			tfOrderNumber.setPromptText("Order Number");
+
+			root = new AnchorPane();
+			scene = new Scene(root, 650, 400);
+
+			// Put children components into AnchorPane
+			root.getChildren().addAll(title, btnNewOrder, btnPizzaStatus, tfOrderNumber, fork, pizza);
+
+			// If New Order button is pressed, go to the New Customer Order Page
+			btnNewOrder.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					Database database = new Database();
+					newCustomerGui = new Customergui(database);
+					scene = new Scene(newCustomerGui, 1080, 720);
+					primaryStage.setScene(scene);
+					primaryStage.show();
+				}
+			});
+
+			btnPizzaStatus.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					// 1. Parse text from user and check to see if text input is valid
+					// 2. Check database to see if order number exists
+					// 3. If true, set button to go to order status page
+
+					// Create database/Add order to database
+					db = new Database();
+					db.createDatabase();
+
+					// Parse text from text field
+					String orderString = tfOrderNumber.getText(); // store order number input
+					String trimorderString = orderString.trim(); // trim whitespace
+					int tfOrderNum = Integer.parseInt(trimorderString); // Parse String into integer
+
+					// Check if particular order number is in database
+					if (db.foundOrderNumber(tfOrderNum) == true) {
+
+						// Store order from db
+						Order order = db.getOrder(tfOrderNum);
+					
+						// Check if text field input is the same as the actual order number
+						if (order.getStatus().toUpperCase() == "PROCESSING") { // part 1 doc says ACCEPTED
+							retCustomer.InitialWaitingWindow(db1, tfOrderNum);
+						} 
+						else if (order.getStatus().toUpperCase() == "COOKING") {
+							retCustomer.IntermediateWaitingWindow(db, tfOrderNum);
+						} 
+						else if (order.getStatus().toUpperCase() == "READY") {
+							retCustomer.FinishedWaitingWindow(db1, tfOrderNum);
+						} 
+						else {
+							// Do nothing
+						}
+
+					} else {
+						tfOrderNumber.clear();
 						tfOrderNumber.setStyle("-fx-prompt-text-fill: red;");
 						tfOrderNumber.setPromptText("Invalid Order Number");
-	        		}
-	                
-	        		
-	        		
-	            }
-	        });
-	        
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
-	    primaryStage.setScene(scene);
-        primaryStage.show();
+					}
+				}
+			});
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		primaryStage.setScene(scene);
+		primaryStage.show();
+
 	}
+
 	public static void main(String[] args) {
 		launch(args);
 	}
-	
-}
 
+}

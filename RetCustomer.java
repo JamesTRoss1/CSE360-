@@ -25,8 +25,7 @@ public class RetCustomer extends Application {
 	private Scene scene;
 	private Stage primaryStage;
 	private Database db;
-	private ChefGUI chefGui;
-
+	
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -79,7 +78,8 @@ public class RetCustomer extends Application {
 			btn.setText("ENTER");
 
 			root = new AnchorPane();
-			scene = new Scene(root, 650, 500);
+			
+			scene = new Scene(root, 1280, 720);
 
 			// Put children components into AnchorPane
 			root.getChildren().addAll(title, tfOrderNumber, counter, btn);
@@ -91,51 +91,43 @@ public class RetCustomer extends Application {
 					// 1. Parse text from user and check to see if text input is valid
 					// 2. Check database to see if order number exists
 					// 3. If true, set button to go to order status page
-
-					// Make a order first
-					String[] array = { "Mushrooms", "Pepperoni" };
-					Pizza pizza = new Pizza(array, "Large", "Cheese");
-					Order sampleOrder = new Order(1, 0, "pc01", pizza, 30); // first argument is the order number
-					int order_num = sampleOrder.getOrderNumber();
-
-					// Parse text from text field
-					String orderString = tfOrderNumber.getText(); // store order number input
-					String trimorderString = orderString.trim(); // trim whitespace
-					int orderNum = Integer.parseInt(trimorderString); // Parse String into integer
-
+		
 					// Create database/Add order to database
 					db = new Database();
-					//db.createDatabase();
-					db.addOrder(sampleOrder);
+					db.createDatabase();
 					
-					
+				// Parse text from text field
+					String orderString = tfOrderNumber.getText(); // store order number input
+					String trimorderString = orderString.trim(); // trim whitespace
+					int tfOrderNum = Integer.parseInt(trimorderString); // Parse String into integer
+				
 					
 					// Check if particular order number is in database
-					if (db.foundOrderNumber(order_num) == true) {
+					if (db.foundOrderNumber(tfOrderNum) == true) {
 						
-						if(orderNum == order_num) {
-							Order order = db.getOrder(sampleOrder.getOrderNumber());
-							//order.setStatus("PROCESSING");
-							System.out.println(order.getStatus()); 
+						// Store order from db
+						Order order = db.getOrder(tfOrderNum);
+						
+						// Check if text field input is the same as the actual order number
 							
 							if(order.getStatus().toUpperCase() == "PROCESSING") { // part 1 doc says ACCEPTED
-								InitialWaitingWindow();
+								InitialWaitingWindow(db, tfOrderNum);
 							}
 							else if(order.getStatus().toUpperCase() == "COOKING") {
-								IntermediateWaitingWindow();
+								IntermediateWaitingWindow(db, tfOrderNum);
 							}
 							else if(order.getStatus().toUpperCase() == "READY") {
-								FinishedWaitingWindow();
+								FinishedWaitingWindow(db, tfOrderNum);
 							}
 							else {
-								//
+								// Do nothing
 							}
-						}
-						else {
-							tfOrderNumber.clear();
-							tfOrderNumber.setStyle("-fx-prompt-text-fill: red;");
-							tfOrderNumber.setPromptText("Invalid Order Number");
-						}
+							
+					}
+					else {
+						tfOrderNumber.clear();
+						tfOrderNumber.setStyle("-fx-prompt-text-fill: red;");
+						tfOrderNumber.setPromptText("Invalid Order Number");
 					}
 				}
 			});
@@ -147,20 +139,21 @@ public class RetCustomer extends Application {
 		primaryStage.show();
 	}
 
-	public void InitialWaitingWindow() {
+	public void InitialWaitingWindow(Database db1, int tfOrderNumber) {
 		try {
 			
-			// Make a order first
-			String[] array = { "Mushrooms", "Pepperoni" };
-			Pizza pizza_ = new Pizza(array, "Large", "Cheese");
-			Order sampleOrder = new Order(1, 0, "pc01", pizza_, 30); // first argument is the order number
+			// Initialize again
+			db = db1;
+			int argtfOrderNumber = tfOrderNumber;
+			Order order = db.getOrder(argtfOrderNumber);
+			
 			
 			Label orderNumber = new Label();
 			orderNumber.setLayoutX(54.0);
 			orderNumber.setLayoutY(39.0);
 			orderNumber.setPrefHeight(35.0);
 			orderNumber.setPrefWidth(254.0);
-			orderNumber.setText("For: " + sampleOrder.getAsu());
+			orderNumber.setText("For: " + order.getAsu());
 			orderNumber.setFont(Font.font("Arial", 18.0));
 
 			Label for_Label = new Label();
@@ -168,7 +161,7 @@ public class RetCustomer extends Application {
 			for_Label.setLayoutY(74.0);
 			for_Label.setPrefHeight(35.0);
 			for_Label.setPrefWidth(254.0);
-			for_Label.setText("Order Number: " + sampleOrder.getOrderNumber());
+			for_Label.setText("Order Number: " + order.getOrderNumber());
 			for_Label.setFont(Font.font("Arial", 18.0));
 
 			Label orderStatus = new Label();
@@ -220,7 +213,7 @@ public class RetCustomer extends Application {
 			btn.setText("Back");
 
 			root = new AnchorPane();
-			scene = new Scene(root, 650, 500);
+			scene = new Scene(root, 1280, 720);
 
 			root.getChildren().addAll(orderNumber, for_Label, orderStatus, progressbar, fork, pizza, btn);
 
@@ -239,20 +232,20 @@ public class RetCustomer extends Application {
 		primaryStage.show();
 	}
 	
-	public void IntermediateWaitingWindow() {
+	public void IntermediateWaitingWindow(Database db1, int tfOrderNumber) {
 		try {
 			
-			// Make a order first
-			String[] array = { "Mushrooms", "Pepperoni" };
-			Pizza pizza_ = new Pizza(array, "Large", "Cheese");
-			Order sampleOrder = new Order(1, 0, "pc01", pizza_, 30); // first argument is the order number
+			// Initialize again
+			db = db1;
+			int argtfOrderNumber = tfOrderNumber;
+			Order order = db.getOrder(argtfOrderNumber);
 			
 			Label orderNumber = new Label();
 			orderNumber.setLayoutX(54.0);
 			orderNumber.setLayoutY(39.0);
 			orderNumber.setPrefHeight(35.0);
 			orderNumber.setPrefWidth(254.0);
-			orderNumber.setText("For: " + sampleOrder.getAsu());
+			orderNumber.setText("For: " + order.getAsu());
 			orderNumber.setFont(Font.font("Arial", 18.0));
 
 			Label for_Label = new Label();
@@ -260,7 +253,7 @@ public class RetCustomer extends Application {
 			for_Label.setLayoutY(74.0);
 			for_Label.setPrefHeight(35.0);
 			for_Label.setPrefWidth(254.0);
-			for_Label.setText("Order Number: " + sampleOrder.getOrderNumber());
+			for_Label.setText("Order Number: " + order.getOrderNumber());
 			for_Label.setFont(Font.font("Arial", 18.0));
 
 			Label orderStatus = new Label();
@@ -312,7 +305,7 @@ public class RetCustomer extends Application {
 			btn.setText("Back");
 
 			root = new AnchorPane();
-			scene = new Scene(root, 650, 500);
+			scene = new Scene(root, 1280, 720);
 
 			root.getChildren().addAll(orderNumber, for_Label, orderStatus, progressbar, fork, pizza, btn);
 
@@ -331,20 +324,20 @@ public class RetCustomer extends Application {
 		primaryStage.show();
 	}
 	
-	public void FinishedWaitingWindow() {
+	public void FinishedWaitingWindow(Database db1, int tfOrderNumber) {
 		try {
 			
-			// Make a order first
-			String[] array = { "Mushrooms", "Pepperoni" };
-			Pizza pizza_ = new Pizza(array, "Large", "Cheese");
-			Order sampleOrder = new Order(1, 0, "pc01", pizza_, 30); // first argument is the order number
+			db = db1;
+			int argtfOrderNumber = tfOrderNumber;
+			Order order = db.getOrder(argtfOrderNumber);
+			
 			
 			Label orderNumber = new Label();
 			orderNumber.setLayoutX(54.0);
 			orderNumber.setLayoutY(39.0);
 			orderNumber.setPrefHeight(35.0);
 			orderNumber.setPrefWidth(254.0);
-			orderNumber.setText("For: " + sampleOrder.getAsu());
+			orderNumber.setText("For: " + order.getAsu());
 			orderNumber.setFont(Font.font("Arial", 18.0));
 
 			Label for_Label = new Label();
@@ -352,7 +345,7 @@ public class RetCustomer extends Application {
 			for_Label.setLayoutY(74.0);
 			for_Label.setPrefHeight(35.0);
 			for_Label.setPrefWidth(254.0);
-			for_Label.setText("Order Number: " + sampleOrder.getOrderNumber());
+			for_Label.setText("Order Number: " + order.getOrderNumber());
 			for_Label.setFont(Font.font("Arial", 18.0));
 
 			Label orderStatus = new Label();
