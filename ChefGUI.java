@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.stage.Stage;
 
 public class ChefGUI extends HBox
 {
@@ -63,6 +62,16 @@ public class ChefGUI extends HBox
 		Button refreshButton = new Button("Refresh");
 		refreshButton.setOnAction(new ButtonHandler());
 		
+		// Create a button that deletes finished orders from the order list
+		Button deleteButton = new Button("Back");
+		deleteButton.setOnAction(new ButtonHandler());
+		
+		// Create a box to hold the buttons
+		HBox buttonBox = new HBox();
+		buttonBox.getChildren().addAll(refreshButton, deleteButton);
+		buttonBox.setAlignment(Pos.CENTER);
+		buttonBox.setSpacing(10);
+		
 		// Create a label that informs the chef what this is about
 		Label incOrdersLabel = new Label("Incoming Orders");
 		incOrdersLabel.setFont(new Font("Arial", 18));
@@ -73,7 +82,7 @@ public class ChefGUI extends HBox
 		VBox queueBox = new VBox();
 		queueBox.setSpacing(10);
 		queueBox.setAlignment(Pos.TOP_CENTER);
-		queueBox.getChildren().addAll(incOrdersLabel, orderList, refreshButton);
+		queueBox.getChildren().addAll(incOrdersLabel, orderList, buttonBox);
 		VBox.setVgrow(queueBox, Priority.ALWAYS);
 		//-------------------------------------------------------
 
@@ -288,6 +297,20 @@ public class ChefGUI extends HBox
 				
 				RefreshList(); // Update the list
 				//-------------------------------------------------
+			}
+			
+			else if (text.substring(0, 1).compareTo("B") == 0)
+			{
+				Main main = new Main();
+				
+				try
+				{
+					main.toInitialGUI();
+				}
+				catch (Exception e1)
+				{
+					e1.printStackTrace();
+				}
 			}
 			
 		}
