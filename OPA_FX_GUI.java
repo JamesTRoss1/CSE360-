@@ -38,7 +38,7 @@ public class OPA_FX_GUI extends HBox{
 
         // populate (for the first time) our incoming orders
         boxes = makeBoxes(database);
-
+        
         // Initialize incomingQueue
         incomingQueue = new VBox();
         incomingQueue.setPadding(margin);
@@ -63,6 +63,8 @@ public class OPA_FX_GUI extends HBox{
         // Will update incoming orders/chef's orders through manually clicking a button
         Button refreshButton = new Button("Refresh");
         refreshButton.setOnAction(new buttonEvent());
+        Button backButton = new Button("Back to start menu");
+        backButton.setOnAction(new buttonEvent());
 
         // Label that will be used in conjunction with incomingQueue
         Label incomingLabel = new Label("Incoming Orders");
@@ -80,7 +82,7 @@ public class OPA_FX_GUI extends HBox{
         VBox incomingBox = new VBox();
         incomingBox.setSpacing(10);
         incomingBox.setAlignment(Pos.TOP_CENTER);
-        incomingBox.getChildren().addAll(incomingLabel, incomingScroll, refreshButton, detailsLabelOne, detailsLabelTwo);
+        incomingBox.getChildren().addAll(incomingLabel, incomingScroll, backButton, refreshButton, detailsLabelOne, detailsLabelTwo);
         VBox.setVgrow(incomingBox, Priority.ALWAYS);
         //--------------------
         chefQueue = new VBox();
@@ -150,6 +152,9 @@ public class OPA_FX_GUI extends HBox{
                 // The following button will be used to send the order to the chefQueue
                 Button sendButton = new Button("Send to Chef: " + currentOrder.getOrderNumber());
                 sendButton.setOnAction(new buttonEvent()); // Allows our button to do stuff
+                
+                Button rejectButton = new Button("Reject " + currentOrder.getOrderNumber());
+                rejectButton.setOnAction(new buttonEvent()); 
 
                 Button detailsButton = new Button("View More Info for " + currentOrder.getOrderNumber());
                 detailsButton.setOnAction(new buttonEvent()); // Will be used to display more order information upon request
@@ -160,7 +165,7 @@ public class OPA_FX_GUI extends HBox{
                 currentOrderBox.setBackground(new Background(new BackgroundFill(Color.BLANCHEDALMOND, CornerRadii.EMPTY, Insets.EMPTY)));
                 currentOrderBox.setPadding(margin);
                 currentOrderBox.setSpacing(10);
-                currentOrderBox.getChildren().addAll(asuriteLabel, detailsButton, sendButton);
+                currentOrderBox.getChildren().addAll(asuriteLabel, detailsButton, sendButton, rejectButton);
                 HBox.setHgrow(currentOrderBox, Priority.ALWAYS);
 
                 incomingOrdersArray[i-notIncluded] = currentOrderBox;
@@ -276,7 +281,7 @@ public class OPA_FX_GUI extends HBox{
                         chefQueue.getChildren().add(chefBoxes[i]);
                     }
                 }
-
+                
                 refresh();
             }
             else if(buttonText.substring(0,1).compareTo("V") == 0) {
@@ -310,6 +315,25 @@ public class OPA_FX_GUI extends HBox{
                 chefDetailsLabelTwo.setText(currentOrder.getPizza().getPizzaSize() + ", " + currentOrder.getPizza().getPizzaType() + ", Toppings: "
                         + toppings);
             }
+            else if(buttonText.substring(0,1).compareTo("R") == 0) {
+                // set status to "Processing". Then, call refresh().
+
+                int orderNum = Integer.parseInt(buttonText.substring(7));
+                database.changeOrderStatus(orderNum, "Rejected");
+
+                refresh();
+            }
+            else if(buttonText.substring(0,1).compareTo("B") == 0) {
+                Main main = new Main();
+                try {
+					main.toInitialGUI();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+            }
+            
+            
         }
     }
 }
